@@ -147,6 +147,11 @@ log "Will run Lighthouse CI on $host"
 step "Creating development theme"
 
 if [[ -n "${SHOP_PULL_THEME+x}" ]]; then
+  # `shopify theme pull` now includes Git commands and so we need to mark the
+  # directory as safe.
+  log "Marking the Github directory as safe for Git"
+  git config --global --add safe.directory $GITHUB_WORKSPACE
+
   log "Pulling settings from theme $SHOP_PULL_THEME"
   shopify theme pull --path "$theme_root" --theme ${SHOP_PULL_THEME} --only templates/*.json --only config/settings_data.json
 fi
